@@ -10,7 +10,8 @@ console.log("🌤️ Cloudinary config:", process.env.CLOUD_NAME);
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-app.use(express.static(path.join(__dirname, ".."))); // phục vụ index.html
+app.use(express.static(path.join(__dirname, "..")));
+app.use("/data/imgs", express.static(path.join(__dirname, "../data/imgs"))); // phục vụ index.html
 app.use("/api", cloudApi);
 
 // Bỏ CSP nếu trình duyệt chặn script

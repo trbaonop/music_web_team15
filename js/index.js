@@ -1,8 +1,39 @@
 'use strict';
 
 
-const playLists = JSON.parse(localStorage.getItem(KEY_PLAY_LIST) || '[]');
-const collectLists = JSON.parse(localStorage.getItem(KEY_COLLECT_LIST) || '[]');
+
+// ✅ Lấy danh sách nhạc mới từ localStorage
+// 🔥 Xoá KEY_COLLECT_LIST để tránh bị load nhầm danh sách cũ
+localStorage.removeItem('KEY_COLLECT_LIST');
+
+let playList = JSON.parse(localStorage.getItem('KEY_PLAY_LIST')) || [];
+
+console.log("🎵 Danh sách nhạc Cloudinary:", playList);
+
+// ✅ Render danh sách ra giao diện
+function renderMusicList() {
+  const container = document.querySelector("#musicList"); // Thẻ chứa danh sách
+  if (!container) return console.error("❌ Không tìm thấy thẻ #musicList");
+
+  if (playList.length === 0) {
+    container.innerHTML = "<p>Không có bài hát nào!</p>";
+    return;
+  }
+
+  container.innerHTML = playList.map(song => `
+    <div class="song-item">
+      <img src="${song.imgPath_200}" alt="${song.name}" class="song-img">
+      <div class="song-info">
+        <h4>${song.name}</h4>
+        <p>${song.author || "Không rõ"}</p>
+        <audio controls src="${song.musicPath}"></audio>
+      </div>
+    </div>
+  `).join("");
+}
+
+renderMusicList();
+
 const lyricsLists = JSON.parse(localStorage.getItem(KEY_LYRICS_LIST) || '[]');
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
@@ -946,23 +977,15 @@ playVolumeIcon.addEventListener("click", muteVolume);
 
 
 
-// Start()
-
-
-
-/**
- * playingTool()
- * 播放工具
- */
 const playingTool = function () {
   updatePlayInfo()
   playMusic()
 }
 
-/**
- * Start()
- * 启动 初始化渲染等
- */
+
+
+
+
 
 
 const Start = function () {
