@@ -1,0 +1,67 @@
+/* Menu popup */
+.menu-popup {
+  position: absolute; /* vị trí tuyệt đối so với body */
+  display: none; /* ẩn mặc định */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 5px 0;
+  min-width: 160px;
+  max-width: 220px;
+  z-index: 1000;
+  font-size: 14px;
+  color: #333;
+  max-height: 400px; /* Giới hạn chiều cao */
+  overflow-y: auto; /* Scroll nếu nội dung nhiều */
+  box-sizing: border-box;
+}
+
+/* Hiển thị menu */
+.menu-popup.show {
+  display: block;
+  animation: slideIn 0.2s ease-out;
+}
+
+/* Item trong menu */
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  white-space: nowrap;
+  line-height: 1.6;
+  color: #333;
+  transition: background 0.2s;
+}
+
+.menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.menu-item:focus {
+  outline: none;
+  background-color: #e0e0e0;
+}
+
+/* Hiệu ứng trượt khi mở */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .menu-popup {
+    min-width: 140px;
+    font-size: 12px;
+    max-height: 300px;
+  }
+  .menu-item {
+    padding: 10px 12px;
+  }
+}

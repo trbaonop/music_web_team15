@@ -1,0 +1,77 @@
+/* Topchart page styles (balanced & modern) */
+/* Page background and typography */
+body { background: linear-gradient(180deg,#05221f,#072b29); color: #e6fff7; font-family: Inter, Arial, Helvetica, sans-serif; }
+.container { max-width:1400px; margin: 18px auto; padding: 24px; }
+.tc-header { display:flex; align-items:center; justify-content:space-between; padding:6px 0 18px 0; }
+.back-link { color: inherit; text-decoration:none; font-size:0.95rem; display:inline-flex; align-items:center; gap:10px }
+
+.header-right { display:flex; align-items:center; gap:12px }
+.global-player { display:flex; align-items:center; gap:10px }
+.global-player .global-track { color: rgba(255,255,255,0.85); font-weight:600; max-width:360px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.global-player #globalPlayBtn { width:40px; height:40px; padding:0; display:inline-flex; align-items:center; justify-content:center }
+
+/* Metric buttons (Lượt nghe / Yêu thích / Tải về) */
+.tc-metrics .metric-btn {
+  padding:6px 12px; border-radius:10px; background: rgba(0,0,0,0.25); color:inherit; border:1px solid rgba(255,255,255,0.06); cursor:pointer; font-weight:600;
+}
+.tc-metrics .metric-btn.active {
+  background: linear-gradient(180deg, rgba(0,150,120,0.12), rgba(0,120,100,0.06));
+  border-color: rgba(0,200,160,0.14);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+/* Balanced hero + list layout */
+.tc-main { display:grid; grid-template-columns: 560px 1fr; gap: 32px; align-items:start; margin-top: 6px; }
+.tc-hero { display:flex; gap:18px; align-items:flex-start; position:relative; z-index:2 }
+.tc-cover { width: 520px; height:520px; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:12px }
+.tc-cover img { width: 100%; height:100%; object-fit:contain; border-radius:12px; box-shadow: 0 16px 48px rgba(0,0,0,0.65); border:1px solid rgba(255,255,255,0.02); display:block; flex-shrink:0 }
+.tc-meta { color:inherit; max-width: 420px; display:flex; flex-direction:column; justify-content:center }
+.tc-type { color: rgba(255,255,255,0.65); margin-bottom:8px; font-size:0.95rem }
+.tc-meta h1 { font-size:30px; margin:0 0 8px 0; line-height:1.05; color: #ffffff; letter-spacing:-0.2px }
+.tc-sub { color: rgba(255,255,255,0.65); margin-bottom:12px }
+.tc-actions { display:flex; gap:10px; align-items:center }
+.btn { background: rgba(255,255,255,0.03); color:inherit; border: none; padding:10px 14px; border-radius:22px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow: 0 2px 6px rgba(0,0,0,0.25) }
+.btn.primary { background: linear-gradient(90deg,#00d1b2,#00b3e6); color:#fff; box-shadow: 0 8px 18px rgba(0,0,0,0.4) }
+
+/* Table area */
+.tc-list { overflow:auto }
+.chart-table { width:100%; border-collapse:collapse; margin-top:6px; min-width:0 }
+.chart-table thead th { text-align:left; padding:12px 14px; color: rgba(255,255,255,0.6); font-weight:600; border-bottom:1px solid rgba(255,255,255,0.03); position:sticky; top:0; background: linear-gradient(180deg, rgba(5,34,31,0.9), rgba(5,34,31,0.6)); z-index:1 }
+.chart-table tbody tr { border-bottom:1px solid rgba(255,255,255,0.02); transition: background .12s, transform .06s }
+.chart-table tbody tr:hover { background: rgba(255,255,255,0.015); transform: translateY(-1px) }
+.chart-table tbody td { padding:12px 14px; vertical-align:middle; color: #e6fff7; font-size:0.95rem }
+.col-num { width:48px; color: rgba(255,255,255,0.7); font-weight:600 }
+.col-title { width:52%; }
+.track-thumb { width:44px; height:44px; border-radius:6px; object-fit:cover; margin-right:12px }
+.title-row { display:flex; align-items:center }
+.track-title { font-weight:700 }
+.track-artist { color: rgba(255,255,255,0.7); font-size:0.88rem }
+.col-artist { width:22%; color: rgba(255,255,255,0.65); font-size:0.9rem }
+.col-stats { width:84px; text-align:center; color: rgba(255,255,255,0.75); font-weight:600 }
+.col-duration { width:96px; text-align:right; color: rgba(255,255,255,0.65) }
+
+.play-cell .play-btn-row { display:flex; gap:8px; align-items:center; justify-content:flex-end }
+.play-icon-btn { width:38px; height:38px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.02); border:none; cursor:pointer }
+
+/* When viewport is small, stack hero and list and reduce cover size */
+@media (max-width: 1200px) {
+  .tc-main { grid-template-columns: 1fr; }
+  .tc-cover { width: 320px; height:320px }
+  .tc-cover img { width:100%; height:100% }
+  .container { padding: 16px }
+  .chart-table { min-width: 100%; }
+}
+
+/* Duration spinner */
+.duration.loading { color: transparent; position: relative }
+.duration.loading::after { content: ''; width:14px; height:14px; display:inline-block; border-radius:50%; border:2px solid rgba(255,255,255,0.12); border-top-color: rgba(255,255,255,0.9); animation: tc-spin 0.9s linear infinite; vertical-align: middle; margin-left:6px }
+@keyframes tc-spin { to { transform: rotate(360deg); } }
+
+/* small stats row */
+.tc-stats { margin:10px 0 14px 0; color: rgba(255,255,255,0.75); font-size:0.95rem }
+.tc-stats strong { color: #fff; margin-left:6px }
+
+@media (max-width: 480px) {
+  .tc-cover { width: 220px; height:220px }
+  .tc-cover img { width:100%; height:100% }
+}

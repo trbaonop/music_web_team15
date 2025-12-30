@@ -1,0 +1,109 @@
+/* 🎧 Queue Panel */
+.queue-panel {
+  position: fixed;
+  right: 24px; /* căn cách lề phải nhẹ */
+  bottom: 5px; /* 🔧 hạ xuống gần player hơn (trước là 80px) */
+
+  min-width: 320px;
+  max-width: 380px;
+  max-height: calc(100vh - 140px);
+  background: rgba(20, 20, 20, 0.96);
+  backdrop-filter: blur(10px); /* 🌫 hiệu ứng mờ nền chuyên nghiệp */
+  border: 1px solid rgba(15, 10, 10, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  display: none;
+  z-index: 1000;
+  overflow: hidden; /* chỉ cho phần danh sách cuộn thôi */
+   height: auto; /* panel tự co theo nội dung */
+  max-height: 70vh; /* tránh vượt quá màn hình */
+
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #e8e8e8;
+  transform-origin: bottom right;
+  animation: slideInUp 0.25s ease-out; /* Hiệu ứng mượt khi hiện */
+}
+
+.queue-panel.show {
+  display: block;
+}
+
+/* 🎵 Header */
+.queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px 12px 0 0;
+}
+
+.queue-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.queue-sub {
+  font-size: 12px;
+  color: #a5a5a5;
+}
+
+.queue-actions .icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #b0b0b0;
+  padding: 6px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.queue-actions .icon-btn:hover {
+  color: #fff;
+  transform: scale(1.15);
+}
+
+/* 🎧 Danh sách bài */
+.queue-list {
+  list-style: none;
+  padding: 10px 15px;
+  margin: 0;
+  max-height: calc(70vh - 60px); /* trừ đi phần header, để list cuộn */
+
+  overflow-y: auto;
+}
+
+/* Tùy chỉnh thanh cuộn */
+.queue-list::-webkit-scrollbar {
+  width: 8px;
+}
+.queue-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+}
+.queue-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+.queue-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* 🎬 Animation mượt */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+#queuePanel.queue-panel {
+  bottom: 30px !important;
+  right: 40px !important;
+}

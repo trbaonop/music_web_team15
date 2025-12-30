@@ -1,0 +1,118 @@
+/* ================================
+   ⚙️ SETTINGS PANEL CSS CHUẨN
+================================ */
+
+/* Panel cài đặt */
+.settings-panel {
+  position: fixed;
+  right: 16px;
+  top: 64px; /* canh chuẩn theo thanh topbar */
+  width: 260px;
+  background: rgba(25,25,25,0.96);
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  padding: 10px;
+  display: none; /* mặc định ẩn */
+  z-index: 1100;
+  opacity: 0;
+  transform: scale(0.95);
+  transform-origin: top right;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* Khi mở */
+.settings-panel.active {
+  display: block;
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* menu item */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+.menu-item:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+/* arrow bên phải */
+.menu-item .arrow {
+  margin-left: auto;
+  transition: transform 0.25s ease;
+  color: #bbb;
+}
+
+/* submenu ngôn ngữ */
+.submenu.language-menu {
+  display: none;
+  flex-direction: column;
+  margin: 6px 0 0;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 6px;
+}
+.submenu.language-menu.active {
+  display: flex;
+  animation: slideDown 0.25s ease;
+}
+
+.language-option {
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.language-option:hover {
+  background: rgba(255,255,255,0.05);
+}
+.language-option.active {
+  background: rgba(255,180,64,0.12);
+  color: #ffb400;
+}
+.language-option i.check {
+  margin-left: auto;
+  color: #ffb400;
+  display: none;
+}
+.language-option.active i.check {
+  display: inline-block;
+}
+
+/* overlay nền mờ khi mở panel */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1090;
+  display: none;
+  backdrop-filter: blur(2px);
+  transition: opacity 0.25s ease;
+}
+.overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* hiệu ứng submenu */
+@keyframes slideDown {
+  from { transform: translateY(-6px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+
+
+
+
+

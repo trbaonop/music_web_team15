@@ -1,0 +1,232 @@
+ * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      margin: 0;
+    }
+
+    .login-container {
+      background: #f6f6f6;
+      width: 360px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .login-header {
+      background: url('https://img.freepik.com/free-vector/flat-illustration-customer-support_23-2148887720.jpg') no-repeat center/cover;
+      height: 180px;
+      position: relative;
+    }
+
+    .login-header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .login-body {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      margin: 0 0 20px;
+      text-transform: uppercase;
+      font-size: 24px;
+      font-weight: 800;
+      color: #4a4a4a;
+      letter-spacing: 1px;
+    }
+
+ .input-group {
+  position: relative;
+  width: 100%;
+  margin-bottom: 35px; /* ✅ tăng khoảng cách giữa các input */
+  padding-bottom: 5px; /* ✅ tạo khoảng trống cho dòng lỗi */
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 45px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  font-size: 15px;
+  background-color: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.input-group i {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #999;
+  pointer-events: none; /* icon bên trái không chặn input */
+  z-index: 2;
+}
+
+/* Icon user, lock, email bên trái */
+.input-group i.fa-user,
+.input-group i.fa-lock,
+.input-group i.fa-envelope {
+  left: 15px;
+}
+
+/* Icon mắt bên phải */
+.input-group i.eye {
+  right: 15px;
+  left: auto;           /* đảm bảo không bị left ghi đè */
+  cursor: pointer;
+  pointer-events: auto; /* có thể click */
+  z-index: 3;
+}
+
+
+/* ✅ DÒNG BÁO LỖI NHỎ GỌN DƯỚI INPUT */
+.error-message {
+  position: absolute;
+  bottom: -18px; /* nằm ngay dưới input */
+  left: 40px;    /* canh lề với text */
+  font-size: 12px;
+  color: red;
+  display: none;
+  line-height: 1;
+  z-index: 4;
+}
+
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .options a {
+      text-decoration: none;
+      color: #6a11cb;
+      font-weight: 500;
+    }
+
+    .options a:hover {
+      text-decoration: underline;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(90deg, #ff8c00, #ffb347);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 1px;
+      transition: transform 0.2s;
+    }
+
+    .login-btn:hover {
+      transform: scale(1.03);
+    }
+
+    @media(max-width: 400px) {
+      .login-container {
+        width: 95%;
+      }
+    }
+
+
+
+
+
+
+
+    /* --- Popup Forgot Password --- */
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup.active {
+  display: flex;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.popup-content h3 {
+  margin-top: 0;
+  color: #6a11cb;
+}
+
+.popup-content input {
+  width: 100%;
+  padding: 10px;
+  margin: 15px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-buttons button {
+  flex: 1;
+  padding: 10px;
+  margin: 0 5px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(90deg, #ff8c00, #ffb347);
+  color: white;
+  border-radius: 5px;
+}
+
+.popup-buttons button:hover {
+  opacity: 0.9;
+}
+
+
+.hidden {
+  display: none;
+}
+
+
+
+
+
+

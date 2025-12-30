@@ -1,0 +1,506 @@
+/* Ẩn nút chuyển theme (đã xóa khỏi HTML) */
+#themeToggle {
+  display: none;
+}
+
+
+/* Toàn bộ trang */
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  padding-bottom: 80px;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 {
+  color: var(--accent);
+  text-align: center;
+  flex: 1;
+}
+
+/* Danh sách bài hát */
+ul { list-style: none; padding: 0; margin-top: 20px; }
+
+li {
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+li:hover { background: var(--hover-bg); }
+
+img {
+  border-radius: 8px;
+  margin-right: 15px;
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+}
+
+.song-info { flex: 1; }
+
+.song-name {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.song-author {
+  font-size: 0.9em;
+  color: var(--subtext-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.singer-avatar {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Audio player */
+audio {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.song-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: var(--card-bg);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.song-cover {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.singer-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.song-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--subtext-color);
+}
+
+.author-text {
+  font-size: 0.9rem;
+  color: var(--subtext-color);
+}
+
+.play-icon { margin-left: auto; }
+
+/* Danh sách nghệ sĩ */
+.artist-list {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 10px 0;
+  margin-top: 10px;
+  min-height: 120px;
+}
+
+/* Tạo vùng chứa avatar cố định, giữ border-radius tròn và cắt ảnh đều */
+.artist-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  min-width: 100px;
+  padding: 6px;            /* giữ khoảng cách đều giữa các mục */
+  background: transparent; /* giữ nền trong suốt để phù hợp với layout */
+}
+
+/* "khung" tròn điều khiển kích thước và cắt ảnh (works even nếu ảnh có nền vuông) */
+.artist-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;        /* cắt phần thừa của ảnh */
+  display: block;
+  flex: 0 0 80px;
+  background: var(--card-bg); /* nền fallback cho ảnh có vùng trong suốt */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+/* đảm bảo ảnh bên trong lấp đầy khung và giữ tỷ lệ */
+.artist-image img,
+.artist-image > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%; /* thừa hưởng, an toàn cho một số trình duyệt */
+}
+
+/* Tên nghệ sĩ căn giữa, cố định chi cao và khoảng cách */
+.artist-name {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--text-color);
+  line-height: 1.1;
+  max-width: 100px;
+  word-wrap: break-word;
+}
+
+.artist-item:hover {
+  opacity: 0.8;
+}
+
+/* Trình phát nhạc */
+.player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.player-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#player-thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+}
+
+#player-title {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+#player-artist {
+  margin: 0;
+  font-size: 0.8rem;
+color: var(--subtext-color);
+}
+
+.player-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.audio-wrapper {
+  flex: 1;
+  max-width: 500px;
+}
+
+.favorite-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.favorite-btn:hover {
+  color: var(--hover-bg);
+}
+
+/* Reset sizing để tính toán kích thước nhất quán */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+#musicList .song-item mark {
+  background: #ffd60a;
+  color: #000;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: 500;
+}
+
+/* Nút xóa bộ lọc */
+.artist-clear-btn {
+  background: var(--accent-color, #1db954);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin: 8px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+
+.artist-clear-btn:hover {
+  background: #1ed760;
+}
+
+/* Grid layout for songs */
+.song-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.song-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+.song-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.song-thumbnail {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.song-info {
+  margin-left: 15px;
+  flex: 1;
+}
+
+.song-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.song-artist {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 5px;
+}
+
+.song-label {
+  font-size: 12px;
+  color: #888;
+  display: flex;
+  align-items: center;
+}
+
+.song-label img {
+  height: 16px;
+  margin-right: 5px;
+}
+
+/* Music Preview Section */
+.music-preview {
+  padding: 20px;
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.preview-header h2 {
+  font-size: 24px;
+  color: #fff;
+  margin: 0;
+}
+
+.view-all {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1db954;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.3s;
+}
+
+.view-all:hover {
+  background: rgba(29, 185, 84, 0.1);
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .preview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.song-card {
+  background: rgba(23, 23, 23, 0.8);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.song-card:hover {
+  background: rgba(40, 40, 40, 0.9);
+  transform: translateY(-2px);
+}
+
+/* Error message styles */
+.error-message {
+  text-align: center;
+  padding: 20px;
+  color: #ff5555;
+  background: rgba(255,85,85,0.1);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.retry-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  padding: 8px 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.retry-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Sidebar navigation links - remove underline and align items */
+aside.sidebar nav a,
+.sidebar nav a {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Ensure focus doesn't reintroduce underline */
+aside.sidebar nav a:focus,
+.sidebar nav a:focus {
+  outline: none;
+  text-decoration: none;
+}
+
+/* ================== TRÁI TIM YÊU THÍCH NGHỆ SĨ (dạng ngang cuộn) ================== */
+.artist-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.artist-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.artist-item:hover::before {
+  opacity: 1;
+}
+
+.fav-artist-heart {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: white;
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.artist-item:hover .fav-artist-heart {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.fav-artist-heart.active {
+  background: #ff3040;
+  color: white;
+  animation: heartbeat 0.6s ease;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}

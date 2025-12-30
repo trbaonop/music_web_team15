@@ -1,0 +1,79 @@
+/* ========== DARK MODE ========== */
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #f5f5f5;
+}
+
+/* Sidebar trong chế độ tối */
+body.dark-mode .sidebar {
+  background: #2a2a2a;
+  border-right: 1px solid #444;
+  color: #fff;
+}
+
+/* Toàn bộ chữ, menu, playlist, username trong sidebar */
+body.dark-mode .sidebar nav ul li,
+body.dark-mode .sidebar p,
+body.dark-mode .sidebar .username,
+body.dark-mode .sidebar .playlist-section li {
+  color: #fff !important;
+}
+
+/* Mục active hoặc hover trong menu sidebar */
+body.dark-mode .sidebar nav ul li.active {
+  background: #007bff;
+  color: #fff !important;
+}
+
+body.dark-mode .sidebar nav ul li:hover {
+  color: #1e90ff !important;
+}
+
+/* Main content */
+body.dark-mode .main {
+  background: #1e1e1e;
+}
+
+/* Player ở dưới */
+body.dark-mode .player {
+  background: #2a2a2a;
+  border-top: 1px solid #444;
+}
+
+/* Danh sách nhạc */
+body.dark-mode #musicList li {
+  background: #333;
+  color: #fff;
+}
+
+/* Thẻ nghệ sĩ */
+body.dark-mode .artist-card p {
+  color: #fff;
+}
+
+/* ========== Nút bật/tắt chế độ ========== */
+.topbar-actions i {
+  font-size: 18px;
+  color: #f8f0f0;
+  cursor: pointer;
+  transition: color 0.3s ease;
+ 
+}
+
+/* Icon ở dark mode */
+body.dark-mode .topbar-actions i {
+  color: #f6ebeb;
+}
+
+/* Ẩn/hiện icon sáng - tối */
+#lightMode { display: none; }
+body.dark-mode #lightMode { display: inline-block; }
+body.dark-mode #darkMode { display: none; }
+
+
+
+.topbar-actions {
+  position: absolute;   /* hoặc fixed nếu muốn luôn nổi */
+  top: 157px;            /* khoảng cách từ trên xuống */
+  right: 100px;          /* 🔹 dịch sang phải 20px */
+}
