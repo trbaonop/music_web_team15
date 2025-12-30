@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Karaoke</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#111; color:#fff; font-family:system-ui,sans-serif; height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+    .karaoke-header { padding:16px; background:#000; text-align:center; color:#1db954; font-weight:bold; font-size:1.4rem; }
+    .karaoke-lyrics { flex:1; padding:20px; overflow-y:auto; text-align:center; font-size:1.7rem; line-height:2.4; }
+    .karaoke-lyrics p { margin:12px 0; padding:12px 20px; border-radius:12px; background:rgba(255,255,255,0.08); transition:0.4s; }
+    .karaoke-lyrics p.current { background:#1db954; color:#000; font-weight:bold; transform:scale(1.08); box-shadow:0 0 30px rgba(29,185,84,0.7); }
+    .no-lyrics, .loading { color:#888; font-style:italic; padding:40px; font-size:1.2rem; }
+    .karaoke-status { padding:10px; background:#000; text-align:center; color:#1db954; font-size:0.95rem; }
+  </style>
+</head>
+<body>
+  <div class="karaoke-header">KARAOKE</div>
+  <div id="karaokeLyrics" class="karaoke-lyrics">
+    <div class="no-lyrics">Bấm nút Karaoke để xem lời</div>
+  </div>
+  <div id="karaokeStatus" class="karaoke-status">Đang chờ...</div>
+
+  <script>
+  const lyricsEl = document.getElementById('karaokeLyrics');
+  const statusEl = document.getElementById('karaokeStatus');
+  let currentLyrics = [];
+  let startTime = 0;
+
+  async function loadLyrics(title, artist) {
+    const fileName = `${title.trim()} - ${artist.trim()}.txt`;
+    const url = `https://raw.githubusercontent.com/trbaonop/music_web_team15/main/lyrics/${encodeURIComponent(fileName)}?_=${Date.now()}.txt`;
+
+    try {
+      const res = await fetch(url);
+      if (res.ok) {
+        const text = await res.text();
+        const trimmed = text.trim();
+        if (trimmed.length > 100 && trimmed.includes('\n')) {
+          console.log('LẤY LỜI THÀNH CÔNG:', fileName);
+          return trimmed;
+        } else {
+          console.log('File trống:', fileName, '(length:', trimmed.length, ')');
+        }
+      } else {
+        console.log('File không tồn tại:', fileName, '(status:', res.status, ')');
+      }
+    } catch (e) {
+      console.log('Lỗi fetch:', fileName);
+    }
+    return null;
+  }
+
+  window.addEventListener('message', async e => {
+    if (e.data.type !== 'PLAY_SONG') return;
+    const { name, artist } = e.data.song;
+
+    lyricsEl.innerHTML = '<div class="loading">Đang lấy lời từ GitHub...</div>';
+    statusEl.textContent = `${artist} – ${name}`;
+
+    const raw = await loadLyrics(name, artist);
+
+    if (raw) {
+      const lines = raw.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('['));
+
+      currentLyrics = lines.map((text, i) => ({ time: i * 4.6, text }));
+
+      lyricsEl.innerHTML = currentLyrics.map(l => `<p>${escapeHtml(l.text)}</p>`).join('');
+      startSync();
+      statusEl.innerHTML = 'Lời từ GitHub ✓';
+    } else {
+      lyricsEl.innerHTML = `<div class="no-lyrics">Chưa có lời cho "${name}" – ${artist}<br><small>Thêm file "${name} - ${artist}.txt" vào GitHub lyrics</small></div>`;
+      statusEl.textContent = 'Chưa có lời';
+    }
+  });
+
+  function startSync() {
+    startTime = performance.now() / 1000;
+    setInterval(() => {
+      const now = performance.now() / 1000 - startTime;
+      document.querySelectorAll('#karaokeLyrics p').forEach((p, i) => {
+        const line = currentLyrics[i];
+        const next = currentLyrics[i + 1];
+        const active = now >= line.time && (!next || now < next.time);
+        p.classList.toggle('current', active);
+        if (active) p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }, 100);
+  }
+
+  function escapeHtml(t) {
+    const div = document.createElement('div');
+    div.textContent = t;
+    return div.innerHTML;
+  }
+</script>
+</body>
+</html>

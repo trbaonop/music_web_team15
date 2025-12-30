@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <title>Top Chart — Web Music Player</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/topchart.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="tc-header">
+      <a href="index.html" class="back-link"><i class="fa-solid fa-chevron-left"></i> Trang chủ</a>
+      <div class="header-right">
+        <div id="globalPlayer" class="global-player">
+          <button id="globalPlayBtn" class="btn" title="Play/Pause"><i class="fa-solid fa-play"></i></button>
+          <div id="globalTrackTitle" class="global-track">—</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="tc-main container">
+      <section class="tc-hero">
+        <div class="tc-cover">
+          <img id="chartCover" src="./data/imgs/default.jpg" alt="Chart cover">
+        </div>
+        <div class="tc-meta">
+          <div class="tc-type">Chart · <span id="chartCount">0</span> bài hát</div>
+          <h1 id="chartTitle">Top 50 Bài Hát Thịnh Hành</h1>
+          <div class="tc-sub">Cập nhật <span id="chartDate">—</span></div>
+
+          <div class="tc-stats" id="chartStats">
+            <span>Tổng lượt nghe: <strong id="chartTotalPlays">0</strong></span>
+            <span style="margin-left:12px">Yêu thích: <strong id="chartTotalLikes">0</strong></span>
+            <span style="margin-left:12px">Tải về: <strong id="chartTotalDownloads">0</strong></span>
+          </div>
+
+          <div class="tc-actions">
+            <button id="chartPlay" class="btn primary"><i class="fa-solid fa-play"></i> Phát</button>
+            <button id="chartDownload" class="btn"><i class="fa-solid fa-download"></i> Tải về</button>
+            <button id="chartShare" class="btn"><i class="fa-solid fa-share-nodes"></i></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="tc-list">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px">
+          <div style="color:rgba(255,255,255,0.7)">Sắp xếp theo:</div>
+          <div class="tc-metrics" style="display:flex;gap:10px">
+            <button class="metric-btn" data-metric="playCount" id="metricPlay">Lượt nghe</button>
+            <button class="metric-btn" data-metric="likes" id="metricLike">Yêu thích</button>
+            <button class="metric-btn" data-metric="downloads" id="metricDownload">Tải về</button>
+          </div>
+        </div>
+
+        <table id="chartTable" class="chart-table">
+          <thead>
+              <tr>
+                <th class="col-num">#</th>
+                <th class="col-title">Tiêu đề</th>
+                <th class="col-artist">Nghệ sĩ</th>
+                <th class="col-stats">Yêu thích</th>
+                <th class="col-stats">Tải về</th>
+                <th class="col-duration">Thời lượng</th>
+              </tr>
+          </thead>
+          <tbody id="chartBody">
+            <!-- Rows inserted by JS -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <audio id="tc-audio" preload="none"></audio>
+  <script src="./js/topchart.js"></script>
+</body>
+</html>

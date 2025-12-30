@@ -2,94 +2,252 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>🎵 Cloudinary Music Player</title>
-  <style>
-    body {
-      background: #121212;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
+  <title data-i18n="appName">🎵 Cloudinary Music Player</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/test.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/yeuthich.css" />
+  <link rel="stylesheet" href="./css/sangtoi.css" />
+  <link rel="stylesheet" href="./css/menu.css" />
+  <link rel="stylesheet" href="./css/caidat.css" />
+  <link rel="stylesheet" href="./css/queue.css" />
+  
+
+  <!-- INIT LOCALSTORAGE SAFE -->
+  <script>
+    if (!localStorage.getItem("KEY_PLAY_LIST")) {
+      localStorage.setItem("KEY_PLAY_LIST", "[]");
+      console.log("✅ INIT KEY_PLAY_LIST = []");
     }
-    h1 { text-align: center; color: #00c8ff; }
-    ul { list-style: none; padding: 0; margin-top: 20px; }
-    li {
-      display: flex;
-      align-items: center;
-      background: #1e1e1e;
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    li:hover { background: #292929; }
-    img {
-      border-radius: 8px;
-      margin-right: 15px;
-      width: 70px;
-      height: 70px;
-      object-fit: cover;
-    }
-    .song-info { flex: 1; }
-    .song-name { font-size: 1.1em; font-weight: bold; }
-    .song-author { font-size: 0.9em; color: #ccc; }
-    audio { width: 100%; margin-top: 20px; }
-  </style>
+  </script>
+
+  <!-- JSON.PARSE PATCH -->
+  <script>
+    const _origParse = JSON.parse;
+    JSON.parse = function (value) {
+      try {
+        if (value === undefined || value === null) return null;
+        return _origParse(value);
+      } catch (e) {
+        console.warn("⚠️ JSON.parse chặn lỗi, trả về null. Input =", value);
+        return null;
+      }
+    };
+  </script>
 </head>
 <body>
-  <h1>🎧 Danh sách nhạc từ Cloudinary</h1>
-  <ul id="musicList">Đang tải danh sách...</ul>
-  <audio id="audioPlayer" controls></audio>
+  <header>
+    <h1 data-i18n="appName">🎵 Cloudinary Music Player</h1>
+  </header>
 
-  <script>
-  async function loadMusicList() {
-    const list = document.getElementById("musicList");
-    const player = document.getElementById("audioPlayer");
+  <!-- PANEL CÀI ĐẶT -->
+  <div id="settingsPanel" class="settings-panel">
+    <div class="menu-item language-item" id="langItem">
+      <i class="fa-solid fa-globe"></i>
+      <span data-i18n="language">Language</span>
+      <i class="fa-solid fa-chevron-right arrow"></i>
+    </div>
 
-    try {
-      const res = await fetch("/api/music"); // gọi API server
-      const data = await res.json();
+    <div class="language-submenu" id="languageSubmenu">
+      <div class="language-option" data-lang="vi" data-i18n="viOption">🇻🇳 Tiếng Việt <i class="fa-solid fa-check check"></i></div>
+      <div class="language-option" data-lang="en" data-i18n="enOption">🇬🇧 English <i class="fa-solid fa-check check"></i></div>
+    </div>
 
-      if (!data.success) {
-        list.innerHTML = "<li>Lỗi tải danh sách nhạc</li>";
-        return;
-      }
+    <div class="menu-item" id="helpItem">
+      <i class="fa-solid fa-circle-question"></i>
+      <span data-i18n="help">Hướng dẫn và hỗ trợ</span>
+    </div>
 
-      const songs = data.songs;
-      if (!songs.length) {
-        list.innerHTML = "<li>Không có bài hát nào</li>";
-        return;
-      }
+    <div class="menu-item" id="feedbackItem">
+      <i class="fa-solid fa-envelope"></i>
+      <span data-i18n="feedback">Góp ý</span>
+    </div>
+  </div>
 
-      // Tạo danh sách hiển thị
-      list.innerHTML = songs.map(song => `
-        <li data-url="${song.musicPath}">
-          <img src="${song.imgPath_200}" onerror="this.src='./data/imgs/default.jpg'" alt="${song.name}">
-          <div class="song-info">
-            <div class="song-name">${song.name}</div>
-            <div class="song-author">${song.author}</div>
-          </div>
-          <span>▶️</span>
+  <!-- Overlay -->
+  <div id="settingsOverlay" class="overlay"></div>
+
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="user-info">
+        <div class="avatar">M</div>
+        <span class="username">WMS</span>
+      </div>
+      <nav>
+        <ul>
+          <li><i class="fa-solid fa-house"></i> <span data-i18n="home">Trang chủ</span></li>
+          <!--<li><i class="fa-solid fa-compass"></i> <span data-i18n="explore">Khám phá</span></li>-->
+          <li>
+            <a href="explore.html" id="btnexplore">
+              <i class="fa-solid fa-compass"></i>
+              <span data-i18n="explore">Khám phá</span>
+            </a>
+          </li>
+          <li id="btnLibrary">
+
+                <i class="fa-solid fa-book-open"></i>
+                      <span data-i18n="library">Thư viện</span>
+          </li>
+
+          <li id="btnTopChart" style="cursor:pointer"><i class="fa-solid fa-music"></i> <span data-i18n="topChart">Top Chart</span></li>
+          <li id="karaokeMenuItem" style="cursor: pointer;">
+              <i class="fa-solid fa-microphone"></i>
+              <span data-i18n="karaoke">Lời bài hát</span>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="playlist-section">
+        <p data-i18n="playlist">Playlist</p>
+        <ul id="favoriteList">
+      <ul id="favoriteList">
+        <li id="favoriteTitle">
+          <span data-i18n="favorites"> Danh sách yêu thích</span>
+        <i class="fa-solid fa-check check"></i>
         </li>
-      `).join("");
+      </ul>
 
-      // Khi click bài hát thì phát
-      list.addEventListener("click", (e) => {
-        const li = e.target.closest("li");
-        if (!li) return;
-        const url = li.dataset.url;
-        player.src = url;
-        player.play();
-      });
 
-    } catch (err) {
-      console.error("❌ Lỗi khi tải danh sách:", err);
-      list.innerHTML = "<li>Lỗi khi tải danh sách nhạc</li>";
-    }
-  }
 
-  loadMusicList();
-  </script>
+
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+      <header class="topbar">
+        <input type="text" class="search" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="🔍 Tìm kiếm bài hát, ca sĩ...">
+        <div id="suggestions" class="suggestions-box"></div>
+        <div class="topbar-actions">
+          <i class="fa-solid fa-sun"></i>
+        </div>
+        <button id="settingsBtn" class="icon-btn" data-i18n-title="settings" title="Cài đặt">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+      </header>
+
+      <div class="banner">
+        <img src="https://open.spotifycdn.com/cdn/images/og-image.548bc4b7.png" alt="Banner">
+      </div>
+
+      <h2 data-i18n="featuredArtists">🎤 Ca sĩ nổi bật</h2>
+      <div class="artist-list" id="artistList"></div>
+      <!-- Thay thế phần danh sách nhạc cũ -->
+       <h2 data-i18n="song"> 🎶 Bài Hát</h2>
+      <div class="song-grid" id="musicList">
+  <!-- Songs will be inserted here -->
+</div>
+<!-- Thêm vào sau phần danh sách nhạc -->
+<div class="music-preview">
+  <div class="preview-header">
+  
+    <a href="all-songs.html" class="view-all">
+      Xem tất cả
+      <i class="fas fa-chevron-right"></i>
+    </a>
+  </div>
+  <div id="previewList" class="preview-grid"></div>
+</div>
+    </main>
+
+    <!-- PLAYER -->
+    <footer class="player">
+      <div class="player-inner">
+        <div class="player-left">
+          <img src="./data/imgs/default.jpg" id="player-thumb" alt="thumb">
+          <div class="player-info">
+            <h4 id="player-title" data-i18n="noSong">Chưa phát bài nào</h4>
+            <p id="player-artist">—</p>
+          </div>
+          <div class="left-actions">
+            <button id="favoriteBtn" class="favorite-btn" aria-label="Yêu thích" data-i18n-title="favorite">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="player-center">
+          <div class="controls">
+            <button class="control-btn shuffle-btn" data-i18n-title="shuffle" title="Phát ngẫu nhiên">
+              <i class="fa-solid fa-shuffle"></i>
+            </button>
+            <button class="control-btn prev-btn" data-i18n-title="prev" title="Quay lại">
+              <i class="fa-solid fa-backward-step"></i>
+            </button>
+            <button class="play-btn" id="playBtn" data-i18n-title="play" title="Play/Pause">
+              <i class="fa-solid fa-play"></i>
+            </button>
+            <button class="control-btn next-btn" data-i18n-title="next" title="Tiếp theo">
+              <i class="fa-solid fa-forward-step"></i>
+            </button>
+            <button class="control-btn repeat-btn" data-i18n-title="repeat" title="Lặp">
+              <i class="fa-solid fa-repeat"></i>
+            </button>
+          </div>
+
+          <div class="progress-row">
+            <span id="timeFrom">00:00</span>
+            <input id="progressBar" type="range" min="0" max="100" value="0">
+            <span id="timeTo">00:00</span>
+          </div>
+        </div>
+
+        <div class="player-right">
+          <div class="right-icons">
+            
+            <button class="icon-btn" aria-label="Volume"><i class="fa-solid fa-volume-high"></i></button>
+            <button class="icon-btn queue-toggle" aria-label="Queue"><i class="fa-solid fa-list"></i></button>
+            <button class="icon-btn" aria-label="Menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <audio id="audioPlayer"></audio>
+    </footer>
+
+    <!-- QUEUE PANEL -->
+    <aside id="queuePanel" class="queue-panel" aria-hidden="true">
+      <header class="queue-header">
+        <div>
+          <h3 data-i18n="queue">Queue</h3>
+          <div class="queue-sub" data-i18n="upNext">Up next</div>
+        </div>
+        <div class="queue-actions"></div>
+      </header>
+      <ul id="queueList" class="queue-list"></ul>
+    </aside>
+  </div>
+
+  <!-- SCRIPTS -->
+  <!-- 1️⃣ File cơ sở hoặc thử nghiệm, nếu có -->
+<script src="./js/test.js"></script>
+
+<!-- 2️⃣ File chính điều khiển player, tạo các hàm và biến nền -->
+<script src="./js/player.js"></script>
+
+<!-- 3️⃣ Các file xử lý giao diện cơ bản (theme, sáng tối, banner, cài đặt, menu) -->
+<script src="./js/sangtoi.js"></script>
+<script src="./js/banner.js"></script>
+<script src="./js/caidat.js"></script>
+<script src="./js/menu.js"></script>
+
+<!-- 4️⃣ Các module phụ thuộc vào player -->
+<script src="./js/main.js"></script>      <!-- player chính, điều khiển phát nhạc -->
+   <!-- danh sách phát (queue) -->
+<script src="./js/yeuthich.js"></script>  <!-- yêu thích (favorite) -->
+<script src="./js/karaoke.js" defer></script>
+<script>
+document.getElementById("btnLibrary").addEventListener("click", function () {
+    window.location.href = "library.html";
+});
+document.getElementById("btnTopChart").addEventListener("click", function () {
+  window.location.href = "top-chart.html";
+});
+document.getElementById("btnexplore").addEventListener("click", function () {
+    window.location.href = "explore.html";
+});
+</script>
+
 </body>
 </html>

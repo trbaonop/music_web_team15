@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tất cả bài hát - Cloudinary Player</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+     body {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #121212, #1a1a1a);
+      color: #f6faf8;
+    }
+
+    /* 🔝 Thanh tiêu đề */
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .page-header a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+
+    .page-header a:hover {
+      color: #1db954;
+    }
+
+    .page-header h1 {
+      font-size: 20px;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    /* 🔍 Ô tìm kiếm */
+    #searchInput {
+      width: 10%;
+      margin: 16px 20px;
+      padding: 10px 14px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      transition: 0.3s;
+    }
+
+    #searchInput:focus {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 8px rgba(29, 185, 84, 0.5);
+    }
+
+    /* 🧱 Lưới bài hát */
+    .full-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* 🎵 Từng bài hát */
+    .song-item {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .song-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(29, 185, 84, 0.3);
+    }
+
+    .song-item.playing {
+      border: 2px solid #1db954;
+      box-shadow: 0 0 15px rgba(29, 185, 84, 0.6);
+      animation: pulse 1.2s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { box-shadow: 0 0 10px rgba(29,185,84,0.3); }
+      to { box-shadow: 0 0 20px rgba(29,185,84,0.8); }
+    }
+
+    .song-cover {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      transition: 0.4s;
+    }
+
+    .song-item:hover .song-cover {
+      transform: scale(1.05);
+    }
+
+    /* Thông tin nhạc */
+    .song-info {
+      padding: 10px;
+    }
+
+    .song-name {
+      font-weight: 600;
+      font-size: 15px;
+      margin: 6px 0 2px;
+      color: #fff;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .song-author {
+      font-size: 12px;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    /* 🎶 Thanh nhạc phía dưới */
+  audio {
+  width: 30%;
+  position: fixed;
+  bottom: 10px; /* cách mép dưới một chút */
+  left: 50%; /* canh giữa theo chiều ngang */
+  transform: translateX(-50%); /* dịch ngược lại để thật sự nằm giữa */
+  background: rgba(0, 0, 0, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px; /* 👈 bo góc nhìn mềm mại hơn */
+  padding: 6px 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5); /* 👈 thêm đổ bóng nhẹ */
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="page-header">
+    <a href="index.html"><i class="fas fa-arrow-left"></i> Quay lại</a>
+    <h1>Tất cả bài hát</h1>
+  </div>
+
+  <input id="searchInput" placeholder="🔍 Tìm kiếm bài hát...">
+
+  <div id="musicList" class="full-grid"></div>
+
+  <audio id="audioPlayer" controls></audio>
+
+  <script>
+    const musicListEl = document.getElementById("musicList");
+    const searchInput = document.getElementById("searchInput");
+    const audioPlayer = document.getElementById("audioPlayer");
+    let allSongs = [];
+
+    async function loadSongs() {
+      try {
+        const res = await fetch("/api/music");
+        const data = await res.json();
+
+        if (!data.success) {
+          throw new Error(data.message || "Không thể tải danh sách nhạc");
+        }
+
+        allSongs = data.songs;
+        renderSongs(allSongs);
+        console.log("🎵 Đã tải", allSongs.length, "bài hát từ server");
+      } catch (err) {
+        console.error(err);
+        musicListEl.innerHTML = `<p style="color:red;text-align:center;">❌ Lỗi khi tải danh sách nhạc</p>`;
+      }
+    }
+
+    function renderSongs(songs) {
+      musicListEl.innerHTML = "";
+      if (!songs.length) {
+        musicListEl.innerHTML = `<p style="text-align:center;color:#888;">Không có bài hát nào</p>`;
+        return;
+      }
+
+      songs.forEach(song => {
+        const div = document.createElement("div");
+        div.className = "song-item";
+        div.dataset.url = song.musicPath;
+
+        div.innerHTML = `
+          <img class="song-cover" src="${song.imgSong}" alt="">
+          <div class="song-info">
+            <div class="song-name">${song.name}</div>
+            <div class="song-author"><i class="fa-solid fa-user"></i> ${song.author}</div>
+          </div>
+        `;
+
+        div.addEventListener("click", () => playSong(song));
+        musicListEl.appendChild(div);
+      });
+    }
+
+    function playSong(song) {
+      audioPlayer.src = song.musicPath;
+      audioPlayer.play();
+
+      document.querySelectorAll(".song-item").forEach(el => el.classList.remove("playing"));
+      const current = Array.from(document.querySelectorAll(".song-item")).find(e => e.dataset.url === song.musicPath);
+      if (current) current.classList.add("playing");
+    }
+
+    searchInput.addEventListener("input", () => {
+      const keyword = searchInput.value.toLowerCase();
+      const filtered = allSongs.filter(s => s.name.toLowerCase().includes(keyword) || s.author.toLowerCase().includes(keyword));
+      renderSongs(filtered);
+    });
+
+    loadSongs();
+  </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư viện Nhạc</title>
+    <link rel="stylesheet" href="./css/library.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Thư viện Nhạc</h1>
+        <button class="back-btn" onclick="window.location.href='index.html'">Quay lại</button>
+    </header>
+
+    <!-- Tab điều hướng 
+    <div class="library-tabs">
+        <button class="tab-btn active" data-tab="overview">Tổng quan</button>
+        <button class="tab-btn" data-tab="songs">Bài hát</button>
+        
+        <button class="tab-btn" data-tab="albums">Album</button>
+        <button class="tab-btn" data-tab="artists">Nghệ sĩ</button> -->
+    </div>
+
+    <div class="library-container">
+        <!-- [TẤT CẢ NỘI DUNG GIỮ NGUYÊN NHƯ TRƯỚC] -->
+        <!-- (Giống hệt phần bạn gửi, không thay đổi) -->
+        <!-- ==================== TỔNG QUAN ==================== -->
+        <div id="overview" class="tab-content active">
+            <section class="block">
+                <div class="section-header">
+                    <h2>Gần đây phát</h2>
+                    <!--<a href="#" class="view-all" onclick="switchTab('songs')">Xem tất cả ></a>-->
+                </div>
+                <ul id="recentSongs" class="song-list recent-list"></ul>
+            </section>
+            <section class="block">
+                <h2>Yêu thích nhất</h2>
+                <ol id="topSongs" class="top-list"></ol>
+            </section>
+            
+           <!-- <section class="block">
+                <h2>Nghệ sĩ yêu thích</h2>
+                <div id="favoriteArtists" class="artist-grid"></div>
+            </section>
+            <section class="block">
+                <h2>Album gần đây</h2>
+                <div id="recentAlbums" class="album-grid"></div>
+            </section>
+            <section class="block" id="downloadedSection" style="display: none;">
+                <h2>Đã tải xuống</h2>
+                <ul id="downloadedSongs" class="song-list"></ul>
+            </section>-->
+          
+        </div>
+
+        <!-- [CÁC TAB KHÁC GIỮ NGUYÊN] -->
+        <div id="songs" class="tab-content"> ... </div>
+        <div id="playlists" class="tab-content"> ... </div>
+        <div id="albums" class="tab-content"> ... </div>
+        <div id="artists" class="tab-content"> ... </div>
+    </div>
+
+    <!-- TÁCH RIÊNG JS -->
+    <script src="./js/library.js"></script>
+</body>
+</html>

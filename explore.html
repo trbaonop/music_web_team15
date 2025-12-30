@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Khám phá - Music App</title>
+  <link rel="stylesheet" href="/css/explore.css" />
+  <script defer src="/js/explore.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="/">MyMusic</a>
+    <nav>
+      <a href="/">Trang chủ</a>
+      <a href="/khampha.html" class="active">Khám phá</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Khám phá</h1>
+
+    <section class="section" id="artists-section">
+      <h2>Nghệ sĩ nổi bật</h2>
+      <div id="artists" class="artists-grid">Đang tải nghệ sĩ...</div>
+    </section>
+
+    <section class="section" id="popular-section">
+      <h2>Bài hát phổ biến</h2>
+      <div id="popular" class="songs-grid">Đang tải bài hát...</div>
+    </section>
+
+    <section class="section" id="random-section">
+      <h2>Gợi ý cho bạn</h2>
+      <div id="random" class="songs-grid">Đang tải gợi ý...</div>
+    </section>
+  </main>
+
+  <footer class="footer">© MyMusic</footer>
+
+  <!-- audio player -->
+  <div id="player-bar" class="player-bar">
+    <img id="player-cover" src="/data/imgs/default.jpg" alt="cover" />
+    <div class="player-meta">
+      <div id="player-title" class="player-title">Chưa phát</div>
+      <div id="player-artist" class="player-artist"></div>
+    </div>
+    <audio id="player" preload="none" controls></audio>
+  </div>
+</body>
+</html>
