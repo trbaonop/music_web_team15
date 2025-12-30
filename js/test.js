@@ -1,37 +1,31 @@
-// test.js
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("🎬 test.js đã chạy");
+  console.log("🎬 test.js chạy...");
 
-  // 🔥 Xoá danh sách cũ để đảm bảo load mới
-  localStorage.removeItem("KEY_COLLECT_LIST");
-
-  // ⏱ Đợi 0.5s để autoPlayList.js lưu KEY_PLAY_LIST
   setTimeout(() => {
-    const playListRaw = localStorage.getItem("KEY_PLAY_LIST");
-    console.log("📦 KEY_PLAY_LIST raw:", playListRaw);
+    const raw = localStorage.getItem("KEY_PLAY_LIST");
 
-    if (!playListRaw) {
-      console.warn("⚠️ Không tìm thấy KEY_PLAY_LIST trong localStorage!");
-      return;
+    let list = [];
+    try {
+      list = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(list)) list = [];
+    } catch (e) {
+      console.error("❌ Parse KEY_PLAY_LIST lỗi:", e);
+      list = [];
     }
 
-    const playList = JSON.parse(playListRaw);
-    console.log("🎶 Danh sách KEY_PLAY_LIST:", playList);
+    console.log("🎶 Dữ liệu render:", list);
 
     const container = document.querySelector("#musicList");
-    if (!container) {
-      console.error("❌ Không tìm thấy thẻ #musicList trong HTML");
+    if (!container) return console.error("❌ Không tìm thấy #musicList");
+
+    if (!list.length) {
+      container.innerHTML = "<p>⚠️ Không có bài hát nào</p>";
       return;
     }
 
-    if (!Array.isArray(playList) || playList.length === 0) {
-      container.innerHTML = "<p>⚠️ Không có bài hát nào được tải!</p>";
-      return;
-    }
-
-    container.innerHTML = playList.map(song => `
+    container.innerHTML = list.map(song => `
       <div class="song-item">
-        <img src="${song.imgPath_200}" alt="${song.name}" class="song-img">
+        <img src="${song.imgSong}" class="song-img" onerror="this.src='/data/imgs/default.jpg'">
         <div class="song-info">
           <h4>${song.name}</h4>
           <p>${song.author}</p>
@@ -40,6 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `).join("");
 
-    console.log("✅ Render danh sách hoàn tất");
+    console.log("✅ Render hoàn tất");
   }, 500);
 });
